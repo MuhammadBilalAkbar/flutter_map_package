@@ -7,34 +7,36 @@ import 'package:location/location.dart';
 import '../app_constants.dart';
 
 class LiveLocationPage extends StatefulWidget {
-  const LiveLocationPage({Key? key}) : super(key: key);
+  const LiveLocationPage(this.title, {Key? key}) : super(key: key);
+
+  final String title;
 
   @override
   LiveLocationPageState createState() => LiveLocationPageState();
 }
 
 class LiveLocationPageState extends State<LiveLocationPage> {
-  LocationData? _currentLocation;
-  late final MapController _mapController;
+  LocationData? currentLocation;
+  late final MapController mapController;
 
-  bool _liveUpdate = false;
-  bool _permission = false;
+  bool liveUpdate = false;
+  bool permision = false;
 
-  String? _serviceError = '';
+  String? serviceError = '';
 
   int interActiveFlags = InteractiveFlag.all;
 
-  final Location _locationService = Location();
+  final locationService = Location();
 
   @override
   void initState() {
     super.initState();
-    _mapController = MapController();
+    mapController = MapController();
     initLocationService();
   }
 
   void initLocationService() async {
-    await _locationService.changeSettings(
+    await locationService.changeSettings(
       accuracy: LocationAccuracy.high,
       interval: 1000,
     );
@@ -44,33 +46,34 @@ class LiveLocationPageState extends State<LiveLocationPage> {
     bool serviceRequestResult;
 
     try {
-      serviceEnabled = await _locationService.serviceEnabled();
-
-      if (serviceEnabled) {
-        final permission = await _locationService.requestPermission();
-        _permission = permission == PermissionStatus.granted;
-
-        if (_permission) {
-          location = await _locationService.getLocation();
-          _currentLocation = location;
-          _locationService.onLocationChanged
-              .listen((LocationData result) async {
-            if (mounted) {
-              setState(() {
-                _currentLocation = result;
-
-                if (_liveUpdate) {
-                  _mapController.move(
-                      LatLng(_currentLocation!.latitude!,
-                          _currentLocation!.longitude!),
-                      _mapController.zoom);
-                }
-              });
-            }
-          });
+      serviceEnabled = await locationService.serviceEnabled();
+      if (!serviceEnabled) {
+        debugPrint('Location services are disabled.');
+        return Future.error('Location services are disabled.');
+      } else if (serviceEnabled) {
+        final permission = await locationService.requestPermission();
+        permision = permission == PermissionStatus.granted;
+        if (!permision) {
+          debugPrint('Permission of location is denied.');
+          return Future.error('Permission of location is denied.');
         }
+        location = await locationService.getLocation();
+        currentLocation = location;
+        locationService.onLocationChanged.listen((LocationData result) async {
+          if (mounted) {
+            setState(() {
+              currentLocation = result;
+              if (liveUpdate) {
+                mapController.move(
+                    LatLng(currentLocation!.latitude!,
+                        currentLocation!.longitude!),
+                    mapController.zoom);
+              }
+            });
+          }
+        });
       } else {
-        serviceRequestResult = await _locationService.requestService();
+        serviceRequestResult = await locationService.requestService();
         if (serviceRequestResult) {
           initLocationService();
           return;
@@ -79,9 +82,9 @@ class LiveLocationPageState extends State<LiveLocationPage> {
     } on PlatformException catch (e) {
       debugPrint(e.toString());
       if (e.code == 'PERMISSION_DENIED') {
-        _serviceError = e.message;
+        serviceError = e.message;
       } else if (e.code == 'SERVICE_STATUS_ERROR') {
-        _serviceError = e.message;
+        serviceError = e.message;
       }
       location = null;
     }
@@ -91,17 +94,15 @@ class LiveLocationPageState extends State<LiveLocationPage> {
   Widget build(BuildContext context) {
     LatLng currentLatLng;
 
-    if (_currentLocation != null) {
+    if (currentLocation != null) {
       currentLatLng =
-          LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!);
+          LatLng(currentLocation!.latitude!, currentLocation!.longitude!);
     } else {
       currentLatLng = LatLng(0, 0);
     }
 
     final markers = <Marker>[
       Marker(
-        width: 80,
-        height: 80,
         point: currentLatLng,
         builder: (ctx) => const Icon(
           Icons.location_pin,
@@ -112,26 +113,30 @@ class LiveLocationPageState extends State<LiveLocationPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
-              child: _serviceError!.isEmpty
+              child: serviceError!.isEmpty
                   ? Text('This is a map that is showing '
                       '(${currentLatLng.latitude}, ${currentLatLng.longitude}).')
                   : Text(
                       'Error occurred while acquiring location. Error Message : '
-                      '$_serviceError'),
+                      '$serviceError'),
             ),
             Flexible(
               child: FlutterMap(
-                mapController: _mapController,
+                mapController: mapController,
                 options: MapOptions(
-                  center:
-                      LatLng(currentLatLng.latitude, currentLatLng.longitude),
+                  center: LatLng(
+                    currentLatLng.latitude,
+                    currentLatLng.longitude,
+                  ),
                   zoom: 5,
                   interactiveFlags: interActiveFlags,
                 ),
@@ -150,33 +155,29 @@ class LiveLocationPageState extends State<LiveLocationPage> {
           ],
         ),
       ),
-      floatingActionButton: Builder(builder: (BuildContext context) {
-        return FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _liveUpdate = !_liveUpdate;
+      floatingActionButton: Builder(
+        builder: (context) => FloatingActionButton(
+          onPressed: () => setState(() {
+            liveUpdate = !liveUpdate;
+            if (liveUpdate) {
+              interActiveFlags = InteractiveFlag.rotate |
+                  InteractiveFlag.pinchZoom |
+                  InteractiveFlag.doubleTapZoom;
 
-              if (_liveUpdate) {
-                interActiveFlags = InteractiveFlag.rotate |
-                    InteractiveFlag.pinchZoom |
-                    InteractiveFlag.doubleTapZoom;
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                        'In live update mode only zoom and rotation are enable'),
-                  ),
-                );
-              } else {
-                interActiveFlags = InteractiveFlag.all;
-              }
-            });
-          },
-          child: _liveUpdate
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('In live location rotation is disable'),
+                ),
+              );
+            } else {
+              interActiveFlags = InteractiveFlag.all;
+            }
+          }),
+          child: liveUpdate
               ? const Icon(Icons.location_on)
               : const Icon(Icons.location_off),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

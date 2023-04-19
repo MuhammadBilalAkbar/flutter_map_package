@@ -8,8 +8,9 @@ import 'package:location/location.dart';
 import '../app_constants.dart';
 
 class MapControllerPage extends StatefulWidget {
+  const MapControllerPage(this.title, {Key? key}) : super(key: key);
 
-  const MapControllerPage({Key? key}) : super(key: key);
+  final String title;
 
   @override
   MapControllerPageState createState() {
@@ -74,18 +75,15 @@ class MapControllerPageState extends State<MapControllerPage> {
               child: Row(
                 children: <Widget>[
                   MaterialButton(
-                    onPressed: () =>
-                      mapController.move(london, 18),
+                    onPressed: () => mapController.move(london, 18),
                     child: const Text('London'),
                   ),
                   MaterialButton(
-                    onPressed: () =>
-                      mapController.move(paris, 5),
+                    onPressed: () => mapController.move(paris, 5),
                     child: const Text('Paris'),
                   ),
                   MaterialButton(
-                    onPressed: () =>
-                      mapController.move(dublin, 5),
+                    onPressed: () => mapController.move(dublin, 5),
                     child: const Text('Dublin'),
                   ),
                   CurrentLocation(mapController: mapController),
@@ -121,10 +119,10 @@ class MapControllerPageState extends State<MapControllerPage> {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
                             'Map bounds: \n'
-                                'E: ${bounds.east} \n'
-                                'N: ${bounds.north} \n'
-                                'W: ${bounds.west} \n'
-                                'S: ${bounds.south}',
+                            'E: ${bounds.east} \n'
+                            'N: ${bounds.north} \n'
+                            'W: ${bounds.west} \n'
+                            'S: ${bounds.south}',
                           ),
                         ));
                       },
@@ -160,7 +158,7 @@ class MapControllerPageState extends State<MapControllerPage> {
                 children: [
                   TileLayer(
                     urlTemplate:
-                    'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${AppConstants.mapBoxAccessToken}',
+                        'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${AppConstants.mapBoxAccessToken}',
                     additionalOptions: const {
                       'accessToken': AppConstants.mapBoxAccessToken,
                       'id': AppConstants.mapBoxStyleNightId,

@@ -25,7 +25,8 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PolylineMarkersPage(),
+                      builder: (context) =>
+                          const PolylineMarkersPage('Polyline Markers Page'),
                     ),
                   ),
                   child: const Text('Polyline Markers Page'),
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LiveLocationPage(),
+                      builder: (context) => const LiveLocationPage('Live Location Page'),
                     ),
                   ),
                   child: const Text('Live Location Page'),
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MapControllerPage(),
+                      builder: (context) => const MapControllerPage('Map Controller Page'),
                     ),
                   ),
                   child: const Text('Map Controller Page'),
