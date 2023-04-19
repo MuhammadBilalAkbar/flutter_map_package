@@ -3,14 +3,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '/app_constants.dart';
 
-class PolyLinePage extends StatefulWidget {
-  const PolyLinePage({Key? key}) : super(key: key);
+class PolylineMarkersPage extends StatefulWidget {
+  const PolylineMarkersPage({Key? key}) : super(key: key);
 
   @override
-  State<PolyLinePage> createState() => _PolyLinePageState();
+  State<PolylineMarkersPage> createState() => _PolylineMarkersPageState();
 }
 
-class _PolyLinePageState extends State<PolyLinePage> {
+class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
   List<LatLng> tappedPoints = [];
 
   @override
@@ -49,7 +49,7 @@ class _PolyLinePageState extends State<PolyLinePage> {
           'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${AppConstants.mapBoxAccessToken}',
           additionalOptions: const {
             'accessToken': AppConstants.mapBoxAccessToken,
-            'id': AppConstants.mapBoxStyleId,
+            'id': AppConstants.mapBoxStyleOutdoorId,
           },
         ),
         MarkerLayer(

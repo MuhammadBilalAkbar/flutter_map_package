@@ -17,11 +17,12 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            textStyle: const TextStyle(
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+              textStyle: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12, horizontal: 24)),
         ),
         appBarTheme: const AppBarTheme(
           centerTitle: true,

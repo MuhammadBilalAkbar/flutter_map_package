@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map_package/pages/live_location_page.dart';
 import 'package:flutter_map_package/pages/map_controller_page.dart';
-import 'package:flutter_map_package/pages/poly_line_page.dart';
+import 'package:flutter_map_package/pages/polyline_markers_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,10 +25,10 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PolyLinePage(),
+                      builder: (context) => const PolylineMarkersPage(),
                     ),
                   ),
-                  child: const Text('Poly Line Page'),
+                  child: const Text('Polyline Markers Page'),
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(

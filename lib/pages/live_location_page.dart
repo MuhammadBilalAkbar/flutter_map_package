@@ -137,11 +137,10 @@ class LiveLocationPageState extends State<LiveLocationPage> {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate:
-                        'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${AppConstants.mapBoxAccessToken}',
+                    urlTemplate: AppConstants.urlTemplate,
                     additionalOptions: const {
                       'accessToken': AppConstants.mapBoxAccessToken,
-                      'id': 'mapbox/outdoors-v12',
+                      'id': AppConstants.mapBoxStyleStreetId,
                     },
                   ),
                   MarkerLayer(markers: markers),
