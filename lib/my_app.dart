@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_package/pages/home_page.dart';
+import 'pages/home_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Flutter Map Package',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(
