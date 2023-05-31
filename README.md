@@ -122,8 +122,8 @@ can animate the camera to move around.
 3. I have used [mapbox](https://www.mapbox.com/) to use the API of maps. You can use also
    use [openstreetmap](https://www.openstreetmap.org/) for maps API and its
    docs [here](https://docs.fleaflet.dev/).
-4. Output of this project is following:
-   <img src=Flutter-Map-Package-Output.gif height="600">
+4. Output of this project is following: <br/>
+   <img src=Flutter-Map-Package-Output.gif height="680">
 5. Signup on [mapbox](https://www.mapbox.com/) if you don't have already an account.
     - After sign up, go to [access tokens page](https://account.mapbox.com/access-tokens/) and copy
       the default public token.
