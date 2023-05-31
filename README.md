@@ -108,17 +108,194 @@ can animate the camera to move around.
 1. In this video, you will learn how to use flutter_map package to use your own customizable and
    configurable flutter plugin.
 2. Main points:
-    - _[Add here multiple main points ...]_
-    - _[...]_
-3. _[Out of 1. & 2. create 2-3 sentences that could be later used for recording the introduction of this video lesson]_
+    - Polyline Markers
+    - Map Controller
+3. You can also use [openstreetmap](https://docs.fleaflet.dev/) to show map using flutter_map
+   package.
 
 **The Structured Main Content**
 
-1. _[Add here the main topics the video project is covering in chronological order. For each topic add the main points how this lesson can be taught step by step to beginners who never did anything related to what this lesson is about]_
-2. _[e.g. for this video project: https://www.youtube.com/watch?v=MSv38jO4EJk]_
-    - _[1. Setup Android & iOS]_
-        - _[Add for each topic more detailed steps ...]_
-        - _[...]_
-    - _[2. Pick Image From Gallery]_
-    - _[3. Pick Image From Camera]_
-    - _[4. Persist Images To Local Storage]_
+1. Run `dart pub add flutter_map` in terminal to add flutter_map package in your project's
+   pubspec.yaml file.
+2. Also run `dart pub add latlong2` in terminal to add latlong2 package to use latitude and
+   longitude in flutter_map package.
+3. I have used [mapbox](https://www.mapbox.com/) to use the API of maps. You can use also
+   use [openstreetmap](https://www.openstreetmap.org/) for maps API and its
+   docs [here](https://docs.fleaflet.dev/.)
+4. Output of this project is following:
+   ![](Flutter-Map-Package-Output.gif)
+5. Signup on [mapbox](https://www.mapbox.com/) if you don't have already an account.
+    - After sign up, go to [access tokens page](https://account.mapbox.com/access-tokens/) and copy
+      the default public token.
+    - You can find the style of map [here](https://docs.mapbox.com/api/maps/styles/).
+6. `main.dart` contains MaterialApp with theming properties of app and home of MaterialApp is
+   calling HomePage widget.
+7. `home_page.dart` contains two ElevatedButton in a column.
+    - One button is for Polyline and Markers Page.
+    - Second button is for Map Controller Page.
+8. `app_constants.dart` file contains mapBoxAccessToken, urlTemplate, and
+   some [styles](https://docs.mapbox.com/api/maps/styles/).
+9. In `polyline_markers_page.dart` file, initialize following:
+
+```dart
+
+List<LatLng> tappedPoints = [
+  LatLng(51.5, -0.09),
+  LatLng(51.506678, -0.097124),
+];
+```
+
+Then map these latitude and longitude values to list named markers:
+
+It is list of markers. Marker has many properties.
+![](marker_properties.png)
+
+`point` and `builder` properties of marker are required.
+
+`point` accepts latitude and longitude.
+
+`builder` has `context` for callback and used to draw any widget for markers on map page.
+
+```dart
+
+var markers = tappedPoints
+    .map(
+      (latlng) =>
+      Marker(
+        point: latlng,
+        builder: (_) =>
+        const Icon(
+          Icons.pin_drop,
+          color: Colors.red,
+          size: 30,
+        ),
+      ),
+)
+    .toList();
+```
+
+In body, call `FlutterMap` widget. It has four parameters:
+![](flutter_map_properties.png)
+
+- `options` property of FlutterMap is required. It accepts `MapOptions` widget. It has many
+  properties like center, minZoom, maxZoom, zoom, onTap, and many more.
+  ![](map_options_properties.png)
+
+  onTap of MapOptions is used here to add new points in tappedPoints list which then returns Marker
+  for each tappedPoint item.
+- `children` property of FlutterMap may contains `TileLayer`, `MarkerLayer`, and `PolylineLayer`.
+    - `TileLayer` has many properties.
+      ![](tile_layer_properties.png)
+        - `urlTemplate` accepts string and used for template of map.
+        - `additionalOptions` accepts Map<String, String>. First value is `accessToken` which is
+          public key from mapbox account. Second value is `id`, which is style of map(i.e., in dark
+          mode, street mode, etc). You can find style for
+          mapbox [here](https://docs.mapbox.com/api/maps/styles/).
+    - `MarkerLayer` has `marker` property accepts List of Markers which is from tappedPoints list of
+      markers.`
+    - `PolyLineLayer` has `polylines` property which accepts `List<Polyline>`. `Polyline` has many
+      properties like points, strokeWidth, borderStrokeWidth, borderColor, isDotted, isDotted, and
+      some others.
+      ![](polyline_properties.png)
+      `points` of Polyline widget is required and accepts `List<LatLng>`. PolyLine will be drawn on
+      map according to this list of latitude and longitude.
+
+10. In `map_controller_page.dart`, initialize latitude and longitude of following cities:
+
+```dart
+
+final LatLng london = LatLng(51.5, -0.09);
+final LatLng paris = LatLng(48.8566, 2.3522);
+final LatLng dublin = LatLng(53.3498, -6.2603);
+
+
+late final MapController mapController;
+
+@override
+void initState() {
+  super.initState();
+  mapController = MapController();
+}
+```
+
+Declare list of markers for London, Paris, and Dublin:
+
+```dart
+
+final markers = [
+  Marker(
+    width: 80,
+    height: 80,
+    point: london,
+    builder: (ctx) =>
+        Container(
+          key: const Key('blue'),
+          child: const FlutterLogo(),
+        ),
+  ),
+  Marker(
+    width: 80,
+    height: 80,
+    point: dublin,
+    builder: (ctx) =>
+    const FlutterLogo(
+      key: Key('green'),
+      textColor: Colors.green,
+    ),
+  ),
+  Marker(
+    width: 80,
+    height: 80,
+    point: paris,
+    builder: (ctx) =>
+        Container(
+          key: const Key('purple'),
+          child: const FlutterLogo(textColor: Colors.purple),
+        ),
+  ),
+];
+```
+
+`body` of map controller page contains a column and column has three children in it.
+
+- First child is `Row` which has three `MaterialButton`s according to name of cities whose latitude
+  and longitude is declared.
+    - onPressed property of MaterialButton uses `mapController.move(london, 18)` to move the
+      mapController to specific city as london here.
+    - zmove accepts latlng and zoom as its properties.
+- Second child is also a `Row` which has two `MaterialButton`s.
+    - First button is for fitBounds using `mapController.fitBounds()`. onPressed of this button has
+      following code:
+
+     ```dart 
+                      final bounds = LatLngBounds.fromPoints([
+                        dublin,
+                        paris,
+                        london,
+                      ]);
+
+                      mapController.fitBounds(
+                        bounds,
+                        options: const FitBoundsOptions(
+                          padding: EdgeInsets.only(left: 15, right: 15),
+                        ),
+                      );
+     ```
+
+    - Second button is for getBound using `mapController.bounds!`. onPressed of this button has
+      following code:
+      ```dart
+                        final bounds = mapController.bounds!;
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            'Map bounds: \n'
+                            'E: ${bounds.east} \n'
+                            'N: ${bounds.north} \n'
+                            'W: ${bounds.west} \n'
+                            'S: ${bounds.south}',
+                          ),
+                        ));
+      ```
+
+- Third child is `FlutterMap` widget whose `mapController` property is set to mapController which is
+  declared above in this page.

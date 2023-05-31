@@ -11,9 +11,7 @@ class MapControllerPage extends StatefulWidget {
   final String title;
 
   @override
-  MapControllerPageState createState() {
-    return MapControllerPageState();
-  }
+  MapControllerPageState createState() => MapControllerPageState();
 }
 
 final LatLng london = LatLng(51.5, -0.09);
@@ -62,9 +60,7 @@ class MapControllerPageState extends State<MapControllerPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(

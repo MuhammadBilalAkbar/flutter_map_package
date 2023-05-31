@@ -20,16 +20,18 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
 
   @override
   Widget build(BuildContext context) {
-    var markers = tappedPoints.map((latlng) {
-      return Marker(
-        point: latlng,
-        builder: (ctx) => const Icon(
-          Icons.pin_drop,
-          color: Colors.red,
-          size: 30,
-        ),
-      );
-    }).toList();
+    var markers = tappedPoints
+        .map(
+          (latlng) => Marker(
+            point: latlng,
+            builder: (_) => const Icon(
+              Icons.pin_drop,
+              color: Colors.red,
+              size: 30,
+            ),
+          ),
+        )
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -37,30 +39,26 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
       ),
       body: FlutterMap(
         options: MapOptions(
-            center: AppConstants.myLocation,
-            zoom: 13.0,
-            minZoom: 5,
-            maxZoom: 18,
-            onTap: (_, latlng) {
-              setState(() {
-                tappedPoints.add(latlng);
-                debugPrint(latlng.toString());
-              });
-            }),
+          center: AppConstants.myLocation,
+          zoom: 13.0,
+          minZoom: 5,
+          maxZoom: 18,
+          onTap: (_, latlng) {
+            setState(() {
+              tappedPoints.add(latlng);
+              debugPrint(latlng.toString());
+            });
+          },
+        ),
         children: [
           TileLayer(
-            // urlTemplate:
-            //     "https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/"
-            //     "{z}/{x}/{y}?access_token=${AppConstants.mapBoxAccessToken}",
             urlTemplate: AppConstants.urlTemplate,
             additionalOptions: const {
               'accessToken': AppConstants.mapBoxAccessToken,
               'id': AppConstants.mapBoxStyleOutdoorId,
             },
           ),
-          MarkerLayer(
-            markers: markers,
-          ),
+          MarkerLayer(markers: markers),
           PolylineLayer(
             polylines: [
               Polyline(

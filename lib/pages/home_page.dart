@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '/pages/map_controller_page.dart';
-import '/pages/polyline_markers_page.dart';
+import 'map_controller_page.dart';
+import 'polyline_markers_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(

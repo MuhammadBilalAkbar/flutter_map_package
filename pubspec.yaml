@@ -10,10 +10,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   # to use mapbox with maps
-  flutter_map: ^3.1.0
+  flutter_map: ^4.0.0
   # to use longitude and latitude
   latlong2: ^0.8.1
-  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:
