@@ -13,22 +13,20 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          textTheme: const TextTheme(
-            bodyMedium: TextStyle(fontSize: 20),
-          ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
               textStyle: const TextStyle(
-                fontSize: 30,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              minimumSize: const Size(300, 50),
             ),
           ),
           appBarTheme: const AppBarTheme(
             centerTitle: true,
             titleTextStyle: TextStyle(
-              fontSize: 30,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),

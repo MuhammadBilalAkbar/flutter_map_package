@@ -28,33 +28,42 @@ class MapControllerPageState extends State<MapControllerPage> {
   }
 
   @override
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final markers = [
       Marker(
         width: 80,
         height: 80,
         point: london,
-        builder: (ctx) => Container(
-          key: const Key('blue'),
-          child: const FlutterLogo(),
+        builder: (ctx) => const Icon(
+          Icons.pin_drop,
+          color: Colors.blue,
+          size: 80,
         ),
       ),
       Marker(
         width: 80,
         height: 80,
         point: dublin,
-        builder: (ctx) => const FlutterLogo(
-          key: Key('green'),
-          textColor: Colors.green,
+        builder: (ctx) => const Icon(
+          Icons.pin_drop,
+          color: Colors.green,
+          size: 80,
         ),
       ),
       Marker(
         width: 80,
         height: 80,
         point: paris,
-        builder: (ctx) => Container(
-          key: const Key('purple'),
-          child: const FlutterLogo(textColor: Colors.purple),
+        builder: (ctx) => const Icon(
+          Icons.pin_drop,
+          color: Colors.purple,
+          size: 80,
         ),
       ),
     ];

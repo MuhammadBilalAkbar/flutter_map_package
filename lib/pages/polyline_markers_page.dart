@@ -20,23 +20,19 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
 
   @override
   Widget build(BuildContext context) {
-    var markers = tappedPoints
-        .map(
-          (latlng) => Marker(
-            point: latlng,
-            builder: (_) => const Icon(
-              Icons.pin_drop,
-              color: Colors.red,
-              size: 30,
-            ),
-          ),
-        )
+    final markers = tappedPoints
+        .map((latlng) => Marker(
+              point: latlng,
+              builder: (_) => const Icon(
+                Icons.pin_drop,
+                color: Colors.red,
+                size: 60,
+              ),
+            ))
         .toList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: FlutterMap(
         options: MapOptions(
           center: AppConstants.myLocation,

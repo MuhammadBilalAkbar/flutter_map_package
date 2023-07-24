@@ -120,7 +120,7 @@ can animate the camera to move around.
 2. Also run `dart pub add latlong2` in terminal to add latlong2 package to use latitude and
    longitude in flutter_map package.
 3. I have used [mapbox](https://www.mapbox.com/) to use the API of maps. You can use also
-   use [openstreetmap](https://www.openstreetmap.org/) for maps API and its
+   use [openstreetmap](https://www.openstreetmap.org/) for maps API with its
    docs [here](https://docs.fleaflet.dev/).
 4. Output of this project is following: <br/>
    <img src=Flutter-Map-Package-Output.gif height="680">
@@ -148,7 +148,7 @@ List<LatLng> tappedPoints = [
 Then map these latitude and longitude values to list named markers:
 
 It is list of markers. Marker has many properties.
-![](marker_properties.png)
+![](properties/marker_properties.png)
 
 `point` and `builder` properties of marker are required.
 
@@ -158,34 +158,32 @@ It is list of markers. Marker has many properties.
 
 ```dart
 
-var markers = tappedPoints
-    .map(
-      (latlng) =>
-      Marker(
-        point: latlng,
-        builder: (_) =>
-        const Icon(
-          Icons.pin_drop,
-          color: Colors.red,
-          size: 30,
-        ),
+final markers = tappedPoints
+    .map((latlng) =>
+    Marker(
+      point: latlng,
+      builder: (_) =>
+      const Icon(
+        Icons.pin_drop,
+        color: Colors.red,
+        size: 60,
       ),
-)
+    ))
     .toList();
 ```
 
 In body, call `FlutterMap` widget. It has four parameters:
-![](flutter_map_properties.png)
+![](properties/flutter_map_properties.png)
 
 - `options` property of FlutterMap is required. It accepts `MapOptions` widget. It has many
   properties like center, minZoom, maxZoom, zoom, onTap, and many more.
-  ![](map_options_properties.png)
+  ![](properties/map_options_properties.png)
 
   onTap of MapOptions is used here to add new points in tappedPoints list which then returns Marker
   for each tappedPoint item.
 - `children` property of FlutterMap may contains `TileLayer`, `MarkerLayer`, and `PolylineLayer`.
     - `TileLayer` has many properties.
-      ![](tile_layer_properties.png)
+      ![](properties/tile_layer_properties.png)
         - `urlTemplate` accepts string and used for template of map.
         - `additionalOptions` accepts Map<String, String>. First value is `accessToken` which is
           public key from mapbox account. Second value is `id`, which is style of map(i.e., in dark
@@ -196,11 +194,12 @@ In body, call `FlutterMap` widget. It has four parameters:
     - `PolyLineLayer` has `polylines` property which accepts `List<Polyline>`. `Polyline` has many
       properties like points, strokeWidth, borderStrokeWidth, borderColor, isDotted, isDotted, and
       some others.
-      ![](polyline_properties.png)
+      ![](properties/polyline_properties.png)
       `points` of Polyline widget is required and accepts `List<LatLng>`. PolyLine will be drawn on
       map according to this list of latitude and longitude.
 
-10. In `map_controller_page.dart`, initialize latitude and longitude of following cities:
+10. In `map_controller_page.dart`, initialize mapController, latitude, and longitude of following
+    cities and also dispose mapController:
 
 ```dart
 
@@ -216,6 +215,12 @@ void initState() {
   super.initState();
   mapController = MapController();
 }
+
+@override
+void dispose() {
+  mapController.dispose();
+  super.dispose();
+}
 ```
 
 Declare list of markers for London, Paris, and Dublin:
@@ -228,19 +233,21 @@ final markers = [
     height: 80,
     point: london,
     builder: (ctx) =>
-        Container(
-          key: const Key('blue'),
-          child: const FlutterLogo(),
-        ),
+    const Icon(
+      Icons.pin_drop,
+      color: Colors.blue,
+      size: 80,
+    ),
   ),
   Marker(
     width: 80,
     height: 80,
     point: dublin,
     builder: (ctx) =>
-    const FlutterLogo(
-      key: Key('green'),
-      textColor: Colors.green,
+    const Icon(
+      Icons.pin_drop,
+      color: Colors.green,
+      size: 80,
     ),
   ),
   Marker(
@@ -248,10 +255,11 @@ final markers = [
     height: 80,
     point: paris,
     builder: (ctx) =>
-        Container(
-          key: const Key('purple'),
-          child: const FlutterLogo(textColor: Colors.purple),
-        ),
+    const Icon(
+      Icons.pin_drop,
+      color: Colors.purple,
+      size: 80,
+    ),
   ),
 ];
 ```
