@@ -14,9 +14,9 @@ class MapControllerPage extends StatefulWidget {
   MapControllerPageState createState() => MapControllerPageState();
 }
 
-final LatLng london = LatLng(51.5, -0.09);
-final LatLng paris = LatLng(48.8566, 2.3522);
-final LatLng dublin = LatLng(53.3498, -6.2603);
+const LatLng london = LatLng(51.5, -0.09);
+const LatLng paris = LatLng(48.8566, 2.3522);
+const LatLng dublin = LatLng(53.3498, -6.2603);
 
 class MapControllerPageState extends State<MapControllerPage> {
   late final MapController mapController;
@@ -36,31 +36,31 @@ class MapControllerPageState extends State<MapControllerPage> {
   @override
   Widget build(BuildContext context) {
     final markers = [
-      Marker(
+      const Marker(
         width: 80,
         height: 80,
         point: london,
-        builder: (ctx) => const Icon(
+        child: Icon(
           Icons.pin_drop,
           color: Colors.blue,
           size: 80,
         ),
       ),
-      Marker(
+      const Marker(
         width: 80,
         height: 80,
         point: dublin,
-        builder: (ctx) => const Icon(
+        child: Icon(
           Icons.pin_drop,
           color: Colors.green,
           size: 80,
         ),
       ),
-      Marker(
+      const Marker(
         width: 80,
         height: 80,
         point: paris,
-        builder: (ctx) => const Icon(
+        child: Icon(
           Icons.pin_drop,
           color: Colors.purple,
           size: 80,
@@ -104,11 +104,10 @@ class MapControllerPageState extends State<MapControllerPage> {
                         paris,
                         london,
                       ]);
-
-                      mapController.fitBounds(
-                        bounds,
-                        options: const FitBoundsOptions(
-                          padding: EdgeInsets.only(left: 15, right: 15),
+                      mapController.fitCamera(
+                        CameraFit.bounds(
+                          bounds: bounds,
+                          padding: const EdgeInsets.only(left: 15, right: 15),
                         ),
                       );
                     },
@@ -117,17 +116,19 @@ class MapControllerPageState extends State<MapControllerPage> {
                   Builder(builder: (BuildContext context) {
                     return MaterialButton(
                       onPressed: () {
-                        final bounds = mapController.bounds!;
+                        final bounds = mapController.camera.visibleBounds;
 
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            'Map bounds: \n'
-                            'E: ${bounds.east} \n'
-                            'N: ${bounds.north} \n'
-                            'W: ${bounds.west} \n'
-                            'S: ${bounds.south}',
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Map bounds: \n'
+                              'E: ${bounds.east} \n'
+                              'N: ${bounds.north} \n'
+                              'W: ${bounds.west} \n'
+                              'S: ${bounds.south}',
+                            ),
                           ),
-                        ));
+                        );
                       },
                       child: const Text('Get Bounds'),
                     );
@@ -138,19 +139,20 @@ class MapControllerPageState extends State<MapControllerPage> {
             Flexible(
               child: FlutterMap(
                 mapController: mapController,
-                options: MapOptions(
-                  center: LatLng(51.5, -0.09),
-                  zoom: 5,
+                options: const MapOptions(
+                  initialCenter: LatLng(51.5, -0.09),
+                  initialZoom: 5,
                   maxZoom: 5,
                   minZoom: 3,
                 ),
                 children: [
+                  /// opeStreetMap
                   TileLayer(
                     urlTemplate: AppConstants.urlTemplate,
                     additionalOptions: const {
-                      'accessToken': AppConstants.mapBoxAccessToken,
                       'id': AppConstants.mapBoxStyleNightId,
                     },
+                    fallbackUrl: AppConstants.urlTemplate,
                   ),
                   MarkerLayer(markers: markers),
                 ],

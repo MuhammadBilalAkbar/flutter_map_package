@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
         ),
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
             child: Column(
               children: [
                 ElevatedButton(
@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
                   ),
                   child: const Text('Polyline Markers Page'),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () => Navigator.push(
                     context,

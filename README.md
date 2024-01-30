@@ -30,7 +30,7 @@ samples, guidance on mobile development, and a full API reference.
     - flutter mapbox
     - flutter map template
     - flutter_map mapbox
-    - flutter map ontap
+    - flutter map on tap
     - flutter map navigation
     - flutter map marker icon
     - custom marker google maps flutter
@@ -84,7 +84,7 @@ samples, guidance on mobile development, and a full API reference.
 
 - Question: How can we get our location automatically without describing lat or long?
 
-Answer: You need to add a geolocator in your app so it gets your location automatically when you
+Answer: You need to add a geo locator in your app so it gets your location automatically when you
 open your app and add it directly to the map.
 
 - Question: How to use the animation camera in the flutter map that is in the google map?
@@ -150,11 +150,11 @@ Then map these latitude and longitude values to list named markers:
 It is list of markers. Marker has many properties.
 ![](properties/marker_properties.png)
 
-`point` and `builder` properties of marker are required.
+`point` and `child` properties of marker are required.
 
 `point` accepts latitude and longitude.
 
-`builder` has `context` for callback and used to draw any widget for markers on map page.
+`builder` accepts any widget for markers on map page.
 
 ```dart
 
@@ -162,8 +162,7 @@ final markers = tappedPoints
     .map((latlng) =>
     Marker(
       point: latlng,
-      builder: (_) =>
-      const Icon(
+      child: const Icon(
         Icons.pin_drop,
         color: Colors.red,
         size: 60,
@@ -175,13 +174,14 @@ final markers = tappedPoints
 In body, call `FlutterMap` widget. It has four parameters:
 ![](properties/flutter_map_properties.png)
 
-- `options` property of FlutterMap is required. It accepts `MapOptions` widget. It has many
-  properties like center, minZoom, maxZoom, zoom, onTap, and many more.
+- `options` and `children` property of FlutterMap are required.
+- `options` property of FlutterMap accepts `MapOptions` widget. It has many
+  properties like initialCenter, initialZoom, minZoom, maxZoom, onTap, and many more.
   ![](properties/map_options_properties.png)
 
   onTap of MapOptions is used here to add new points in tappedPoints list which then returns Marker
   for each tappedPoint item.
-- `children` property of FlutterMap may contains `TileLayer`, `MarkerLayer`, and `PolylineLayer`.
+- `children` property of FlutterMap may contain `TileLayer`, `MarkerLayer`, and `PolylineLayer`.
     - `TileLayer` has many properties.
       ![](properties/tile_layer_properties.png)
         - `urlTemplate` accepts string and used for template of map.
@@ -228,34 +228,31 @@ Declare list of markers for London, Paris, and Dublin:
 ```dart
 
 final markers = [
-  Marker(
+  const Marker(
     width: 80,
     height: 80,
     point: london,
-    builder: (ctx) =>
-    const Icon(
+    child: Icon(
       Icons.pin_drop,
       color: Colors.blue,
       size: 80,
     ),
   ),
-  Marker(
+  const Marker(
     width: 80,
     height: 80,
     point: dublin,
-    builder: (ctx) =>
-    const Icon(
+    child: Icon(
       Icons.pin_drop,
       color: Colors.green,
       size: 80,
     ),
   ),
-  Marker(
+  const Marker(
     width: 80,
     height: 80,
     point: paris,
-    builder: (ctx) =>
-    const Icon(
+    child: Icon(
       Icons.pin_drop,
       color: Colors.purple,
       size: 80,
@@ -270,9 +267,8 @@ final markers = [
   and longitude is declared.
     - onPressed property of MaterialButton uses `mapController.move(london, 18)` to move the
       mapController to specific city as london here.
-    - zmove accepts latlng and zoom as its properties.
 - Second child is also a `Row` which has two `MaterialButton`s.
-    - First button is for fitBounds using `mapController.fitBounds()`. onPressed of this button has
+    - First button is for fitBounds using `mapController.fitCamera()`. onPressed of this button has
       following code:
 
      ```dart 
@@ -281,19 +277,19 @@ final markers = [
                         paris,
                         london,
                       ]);
-
-                      mapController.fitBounds(
-                        bounds,
-                        options: const FitBoundsOptions(
-                          padding: EdgeInsets.only(left: 15, right: 15),
+                      mapController.fitCamera(
+                        CameraFit.bounds(
+                          bounds: bounds,
+                          padding: const EdgeInsets.only(left: 15, right: 15),
                         ),
                       );
      ```
 
-    - Second button is for getBound using `mapController.bounds!`. onPressed of this button has
+    - Second button is for getBound using `mapController.camera.visibleBounds`. onPressed of this
+      button has
       following code:
       ```dart
-                        final bounds = mapController.bounds!;
+                        final bounds = mapController.camera.visibleBounds;
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
                             'Map bounds: \n'
@@ -305,5 +301,7 @@ final markers = [
                         ));
       ```
 
-- Third child is `FlutterMap` widget whose `mapController` property is set to mapController which is
-  declared above in this page.
+- Third child is `FlutterMap` widget. `children` and `options` are two required properties.
+- `mapController` property is set to mapController which is declared above in this page.
+- `options` accepts `MapOptions`.
+- `children`

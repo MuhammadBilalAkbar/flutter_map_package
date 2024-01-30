@@ -14,8 +14,8 @@ class PolylineMarkersPage extends StatefulWidget {
 
 class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
   List<LatLng> tappedPoints = [
-    LatLng(51.5, -0.09),
-    LatLng(51.506678, -0.097124),
+    const LatLng(51.5, -0.09),
+    const LatLng(51.506678, -0.097124),
   ];
 
   @override
@@ -23,7 +23,7 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
     final markers = tappedPoints
         .map((latlng) => Marker(
               point: latlng,
-              builder: (_) => const Icon(
+              child: const Icon(
                 Icons.pin_drop,
                 color: Colors.red,
                 size: 60,
@@ -35,8 +35,8 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
       appBar: AppBar(title: Text(widget.title)),
       body: FlutterMap(
         options: MapOptions(
-          center: AppConstants.myLocation,
-          zoom: 13.0,
+          initialCenter: AppConstants.myLocation,
+          initialZoom: 13.0,
           minZoom: 5,
           maxZoom: 18,
           onTap: (_, latlng) {
@@ -47,10 +47,19 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
           },
         ),
         children: [
+          /// opeStreetMap
+          // TileLayer(
+          //   urlTemplate:
+          //       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          //   fallbackUrl:
+          //       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          // ),
+
+          /// opeStreetMap
           TileLayer(
             urlTemplate: AppConstants.urlTemplate,
+            fallbackUrl: AppConstants.urlTemplate,
             additionalOptions: const {
-              'accessToken': AppConstants.mapBoxAccessToken,
               'id': AppConstants.mapBoxStyleOutdoorId,
             },
           ),
@@ -59,11 +68,11 @@ class _PolylineMarkersPageState extends State<PolylineMarkersPage> {
             polylines: [
               Polyline(
                 points: [
-                  LatLng(51.5, -0.09),
-                  LatLng(51.498557, -0.072061),
-                  LatLng(51.482418, -0.081503),
-                  LatLng(51.493855, -0.104677),
-                  LatLng(51.506678, -0.097124),
+                  const LatLng(51.5, -0.09),
+                  const LatLng(51.498557, -0.072061),
+                  const LatLng(51.482418, -0.081503),
+                  const LatLng(51.493855, -0.104677),
+                  const LatLng(51.506678, -0.097124),
                 ],
                 color: Colors.red,
                 strokeWidth: 5.0,

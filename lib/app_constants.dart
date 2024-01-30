@@ -12,5 +12,5 @@ class AppConstants {
   static const String mapBoxStyleStreetId = 'mapbox/streets-v12';
   static const String mapBoxStyleNightId = 'mapbox/navigation-night-v1';
 
-  static final myLocation = LatLng(51.5, -0.09);
+  static const myLocation = LatLng(51.5, -0.09);
 }
